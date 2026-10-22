@@ -30,7 +30,7 @@
     "D": [{ start: 8, end: 20, inWindow: [0, 8], outWindow: [20, 24] }],
     "บ1": [{ start: 16, end: 20, inWindow: [0, 16], outWindow: [20, 24] }],
     "ช02": [{ start: 6, end: 14 }],
-    "ช09": [{ start: 6, end: 8, outWindow: [8, 24] }]
+    "ช09": [{ start: 6, end: 8, outWindow: [8, 24], outWindowEndExclusive: true }]
   };
   const STATUS_LABELS = {
     all: "ทั้งหมด",
@@ -390,7 +390,11 @@
       start: makeDate(date, rule.start),
       end: makeDate(date, rule.end),
       inWindow: rule.inWindow ? rule.inWindow.map((hour) => makeDate(date, hour)) : null,
-      outWindow: rule.outWindow ? rule.outWindow.map((hour) => makeDate(date, hour)) : null,
+      outWindow: rule.outWindow ? rule.outWindow.map((hour, boundary) => {
+        const time = makeDate(date, hour);
+        if (boundary === 1 && rule.outWindowEndExclusive) time.setTime(time.getTime() - 1);
+        return time;
+      }) : null,
       checkIn: null,
       checkOut: null,
       late: false
