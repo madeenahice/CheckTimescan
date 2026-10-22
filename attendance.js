@@ -21,16 +21,16 @@
     "ชIบ": [{ start: 8, end: 24 }],
     "ชบI": [{ start: 8, end: 24 }],
     "ชIบI": [{ start: 8, end: 24 }],
-    "ช09ช06": [{ start: 6, end: 16, outWindow: [8, 24] }],
+    "ช09ช06": [{ start: 6, end: 16, outWindow: [16, 26] }],
     "ช09บ1": [{ start: 6, end: 20, inWindow: [0, 6], outWindow: [20, 24] }],
     "ชSบ": [{ start: 8, end: 24 }],
     "ชGบ": [{ start: 8, end: 24 }],
     "ดบ": [{ start: 0, end: 8, label: "ด" }, { start: 16, end: 24, label: "บ", inWindow: [0, 16] }],
-    "ช06": [{ start: 8, end: 16, outWindow: [8, 24] }],
+    "ช06": [{ start: 8, end: 16, inWindow: [0, 8], outWindow: [16, 26] }],
     "D": [{ start: 8, end: 20, inWindow: [0, 8], outWindow: [20, 24] }],
     "บ1": [{ start: 16, end: 20, inWindow: [0, 16], outWindow: [20, 24] }],
     "ช02": [{ start: 6, end: 14 }],
-    "ช09": [{ start: 6, end: 8 }]
+    "ช09": [{ start: 6, end: 8, outWindow: [8, 24] }]
   };
   const STATUS_LABELS = {
     all: "ทั้งหมด",
