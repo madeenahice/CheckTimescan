@@ -1,0 +1,119 @@
+:root {
+  color-scheme: light;
+  --page-bg: #f4f7fb;
+  --ink: #172b4d;
+  --muted: #64748b;
+  --brand: #2457c5;
+}
+
+body {
+  min-height: 100vh;
+  background: var(--page-bg);
+  color: var(--ink);
+}
+
+.app-header {
+  background: #fff;
+  border-bottom: 1px solid #e2e8f0;
+}
+
+.app-header h1 {
+  color: var(--ink);
+}
+
+.eyebrow {
+  color: var(--brand);
+  font-size: .72rem;
+  font-weight: 700;
+  letter-spacing: .12em;
+}
+
+.app-card {
+  border: 1px solid #e6ebf2;
+  border-radius: .85rem;
+  box-shadow: 0 4px 16px rgb(23 43 77 / 4%);
+}
+
+.privacy-note {
+  border-color: #cfe2ff;
+}
+
+.btn-primary {
+  --bs-btn-bg: var(--brand);
+  --bs-btn-border-color: var(--brand);
+  --bs-btn-hover-bg: #1d47a3;
+  --bs-btn-hover-border-color: #1d47a3;
+}
+
+.status-badge {
+  display: inline-block;
+  border-radius: 999px;
+  padding: .3rem .6rem;
+  font-size: .78rem;
+  font-weight: 600;
+  white-space: nowrap;
+}
+
+.status-on-time {
+  color: #12633b;
+  background: #e4f5ec;
+}
+
+.status-late {
+  color: #8a4b00;
+  background: #fff0d1;
+}
+
+.status-missing-in {
+  color: #a52b2b;
+  background: #fde8e8;
+}
+
+.status-missing-out {
+  color: #6242a5;
+  background: #eee8fb;
+}
+
+table thead th {
+  background: #f8fafc;
+  color: #52627a;
+  font-size: .82rem;
+  font-weight: 600;
+  white-space: nowrap;
+}
+
+table tbody td {
+  white-space: nowrap;
+}
+
+.shift-round + .shift-round,
+.status-badge + .shift-round {
+  margin-top: .35rem;
+}
+
+.summary-card {
+  height: 100%;
+  border: 1px solid #e6ebf2;
+  border-radius: .75rem;
+  background: #fff;
+  padding: 1rem;
+}
+
+.summary-label {
+  color: var(--muted);
+  font-size: .85rem;
+}
+
+.summary-value {
+  color: var(--ink);
+  font-size: 1.5rem;
+  font-weight: 700;
+}
+
+@media (max-width: 576px) {
+  .app-header .container,
+  main.container {
+    padding-left: 1rem;
+    padding-right: 1rem;
+  }
+}

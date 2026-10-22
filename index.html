@@ -1,0 +1,124 @@
+<!doctype html>
+<html lang="th">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <meta name="description" content="ตรวจสอบเวลาสแกนเทียบกับตารางเวรจากไฟล์ Excel หรือ CSV">
+  <title>ตรวจสอบเวลาสแกนและตารางเวร</title>
+  <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/css/bootstrap.min.css" rel="stylesheet">
+  <link href="styles.css" rel="stylesheet">
+</head>
+<body>
+  <header class="app-header">
+    <div class="container py-4">
+      <p class="eyebrow mb-1">ATTENDANCE REVIEW</p>
+      <h1 class="h3 mb-1">ตรวจสอบเวลาสแกนและตารางเวร</h1>
+      <p class="mb-0 text-secondary">นำเข้าไฟล์เวรและ Time Scan เพื่อสรุปผลการเข้างานรายวัน</p>
+    </div>
+  </header>
+
+  <main class="container py-4">
+    <div class="alert alert-info privacy-note" role="note">
+      <strong>ข้อมูลอยู่ในเครื่องของคุณ</strong> — ไฟล์จะถูกอ่านและประมวลผลในเบราว์เซอร์ ไม่มีการอัปโหลดข้อมูลพนักงานไปยังเซิร์ฟเวอร์
+    </div>
+
+    <section class="card app-card mb-4" aria-labelledby="import-heading">
+      <div class="card-body p-4">
+        <h2 id="import-heading" class="h5 mb-3">1. นำเข้าไฟล์</h2>
+        <div class="row g-3">
+          <div class="col-md-6">
+            <label for="roster-file" class="form-label">ไฟล์ตารางเวร</label>
+            <input class="form-control" id="roster-file" type="file" accept=".xlsx,.xls,.csv" multiple>
+            <div class="form-text">เลือกหลายไฟล์พร้อมกันได้ เช่น RN, PN, คัดกรอง, หัตถการ และ Refer โปรแกรมรวมทุกชีตเวรที่ตรงเดือนและปีตาม SAP และข้ามชีตสำเนากับตารางจำนวนเที่ยว Ambulance</div>
+          </div>
+          <div class="col-md-6">
+            <label for="scan-file" class="form-label">ไฟล์ Time Scan</label>
+            <input class="form-control" id="scan-file" type="file" accept=".xlsx,.xls,.csv">
+            <div class="form-text">รวมข้อมูลทุกชีต รองรับ DMY กับเวลาแยกคอลัมน์, STATUS และ SAP ID; ควรมีข้อมูลก่อนวันแรกอย่างน้อย 1 วันสำหรับเวรดึก</div>
+          </div>
+        </div>
+      </div>
+    </section>
+
+    <section class="card app-card mb-4" aria-labelledby="filter-heading">
+      <div class="card-body p-4">
+        <h2 id="filter-heading" class="h5 mb-3">2. เลือกช่วงและประมวลผล</h2>
+        <div class="row g-3 align-items-end">
+          <div class="col-sm-4 col-lg-3">
+            <label for="month" class="form-label">เดือน</label>
+            <select id="month" class="form-select"></select>
+          </div>
+          <div class="col-sm-4 col-lg-3">
+            <label for="year" class="form-label">ปี พ.ศ. (รับ ค.ศ. ด้วย)</label>
+            <input id="year" class="form-control" type="number" min="1900" max="3000" step="1">
+          </div>
+          <div class="col-sm-4 col-lg-3">
+            <label for="employee" class="form-label">รหัสพนักงาน</label>
+            <select id="employee" class="form-select" disabled>
+              <option value="">เลือกทั้งหมด</option>
+            </select>
+          </div>
+          <div class="col-lg-3 d-grid">
+            <button id="process-button" class="btn btn-primary" type="button">ประมวลผล</button>
+          </div>
+        </div>
+        <div id="message" class="mt-3" role="status" aria-live="polite"></div>
+      </div>
+    </section>
+
+    <section id="results-section" class="d-none" aria-labelledby="results-heading">
+      <div class="d-flex flex-wrap justify-content-between align-items-center gap-2 mb-3">
+        <div>
+          <h2 id="results-heading" class="h5 mb-1">3. ผลการตรวจสอบ</h2>
+          <p id="result-period" class="text-secondary mb-0"></p>
+        </div>
+        <div class="d-flex gap-2">
+          <button id="export-csv" class="btn btn-outline-primary" type="button">Export CSV</button>
+          <button id="export-excel" class="btn btn-outline-primary" type="button">Export Excel</button>
+        </div>
+      </div>
+
+      <div id="summary" class="row g-3 mb-4"></div>
+
+      <div class="card app-card">
+        <div class="card-header bg-white border-0 pt-3 px-3">
+          <div id="status-filters" class="nav nav-pills flex-wrap gap-2" role="tablist" aria-label="กรองตามสถานะ"></div>
+        </div>
+        <div class="table-responsive">
+          <table class="table table-hover align-middle mb-0">
+            <thead>
+              <tr>
+                <th scope="col">วันที่</th>
+                <th scope="col">รหัสพนักงาน</th>
+                <th scope="col">ชื่อ-สกุล</th>
+                <th scope="col">รหัสเวร</th>
+                <th scope="col">เวลาเข้า</th>
+                <th scope="col">เวลาออก</th>
+                <th scope="col">สถานะ</th>
+              </tr>
+            </thead>
+            <tbody id="results-body"></tbody>
+          </table>
+        </div>
+        <div id="empty-results" class="text-center text-secondary py-4 d-none">ไม่พบรายการตามตัวกรอง</div>
+        <div class="card-footer bg-white text-secondary small" id="result-count"></div>
+      </div>
+      <p class="small text-secondary mt-3 mb-0">
+        เวร ดบ ตรวจแยก 2 รอบ: ดึก 00:00–08:00 น. และบ่าย 16:00–24:00 น. ต้องมีสแกนเข้า–ออกครบทั้งสองรอบ
+        เวร ช, ชG, ชS (รวม ชi): รับสแกนออก 16:00–02:00 น. ของวันถัดไป
+        เวร บ (รวม บi): รับสแกนเข้า 00:00–16:00 น. ของวันเวร โดยเลือกเวลาที่ใกล้เริ่มหรือเลิกเวรที่สุด
+        เวรอื่นใช้ช่วงสแกนเข้าก่อนเริ่มเวรไม่เกิน 4 ชั่วโมง และสแกนออกก่อนหรือหลังเลิกเวรไม่เกิน 4 ชั่วโมง
+        เวรดึกจับคู่สแกนเข้าตั้งแต่ 20:00 น. ของวันก่อนหน้า ส่วนการมาสายตัดที่เวลาเริ่มเวรโดยไม่มีระยะผ่อนผัน
+      </p>
+    </section>
+  </main>
+
+  <footer class="container py-4 text-secondary small">
+    รองรับไฟล์ .xlsx, .xls และ .csv · หากเปิดผ่าน GitHub Pages ต้องเชื่อมต่ออินเทอร์เน็ตเพื่อโหลด Bootstrap และตัวอ่านไฟล์ Excel
+  </footer>
+
+  <script src="https://cdn.jsdelivr.net/npm/xlsx@0.18.5/dist/xlsx.full.min.js"></script>
+  <script src="attendance.js"></script>
+  <script src="app.js"></script>
+</body>
+</html>
